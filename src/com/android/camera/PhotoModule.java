@@ -2476,13 +2476,21 @@ public class PhotoModule
             case KeyEvent.KEYCODE_VOLUME_UP:
                 if (/*TODO: mActivity.isInCameraApp() &&*/ mFirstTimeInitialized
                     && (mUI.mMenuInitialized)) {
-                    mUI.onScaleStepResize(true);
+                    if (!CameraActivity.mPowerShutter && !CameraUtil.hasCameraKey()) {
+                        onShutterButtonFocus(true);
+                    } else {
+                        mUI.onScaleStepResize(true);
+                    }
                 }
                 return true;
             case KeyEvent.KEYCODE_VOLUME_DOWN:
                 if (/*TODO: mActivity.isInCameraApp() &&*/ mFirstTimeInitialized
                     && (mUI.mMenuInitialized)) {
-                    mUI.onScaleStepResize(false);
+                    if (!CameraActivity.mPowerShutter && !CameraUtil.hasCameraKey()) {
+                        onShutterButtonFocus(true);
+                    } else {
+                        mUI.onScaleStepResize(false);
+                    }
                 }
                 return true;
             case KeyEvent.KEYCODE_FOCUS:
@@ -2511,7 +2519,7 @@ public class PhotoModule
                 return true;
             case KeyEvent.KEYCODE_POWER:
                 if (mFirstTimeInitialized && event.getRepeatCount() == 0
-                        && CameraActivity.mPowerShutter) {
+                        && CameraActivity.mPowerShutter && !CameraUtil.hasCameraKey()) {
                     onShutterButtonFocus(true);
                 }
                 return true;
@@ -2527,6 +2535,10 @@ public class PhotoModule
         switch (keyCode) {
             case KeyEvent.KEYCODE_VOLUME_UP:
             case KeyEvent.KEYCODE_VOLUME_DOWN:
+                if (!CameraActivity.mPowerShutter && !CameraUtil.hasCameraKey()
+                        && mFirstTimeInitialized) {
+                    onShutterButtonClick();
+                }
                 return true;
             case KeyEvent.KEYCODE_FOCUS:
                 if (mFirstTimeInitialized) {
@@ -2534,7 +2546,8 @@ public class PhotoModule
                 }
                 return true;
             case KeyEvent.KEYCODE_POWER:
-                if (CameraActivity.mPowerShutter && mFirstTimeInitialized) {
+                if (CameraActivity.mPowerShutter && !CameraUtil.hasCameraKey()
+                        && mFirstTimeInitialized) {
                     onShutterButtonClick();
                 }
                 return true;
