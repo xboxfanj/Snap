@@ -1191,14 +1191,11 @@ public class PhotoModule
             if(mSnapshotMode == CameraInfo.CAMERA_SUPPORT_MODE_ZSL) {
                 Log.v(TAG, "JpegPictureCallback : in zslmode");
                 mParameters = mCameraDevice.getParameters();
-                if (CameraUtil.isBurstSupported(mParameters)) {
-                    mBurstSnapNum = mParameters.getInt("num-snaps-per-shutter");
-                } else {
-                    mBurstSnapNum = 1;
-                }
+                mBurstSnapNum = CameraUtil.getNumSnapsPerShutter(mParameters);
             }
             Log.v(TAG, "JpegPictureCallback: Received = " + mReceivedSnapNum +
                       "Burst count = " + mBurstSnapNum);
+
             // If postview callback has arrived, the captured image is displayed
             // in postview callback. If not, the captured image is displayed in
             // raw picture callback.
@@ -1228,6 +1225,8 @@ public class PhotoModule
                     && (mSnapshotMode != CameraInfo.CAMERA_SUPPORT_MODE_ZSL)
                     && ((mReceivedSnapNum == mBurstSnapNum) && (mCameraState != LONGSHOT));
             needRestartPreview |= (isLongshotDone() && !mFocusManager.isZslEnabled());
+            Log.v(TAG, "needRestartPreview=" + needRestartPreview);
+
             if (needRestartPreview) {
                 setupPreview();
                 if (CameraUtil.FOCUS_MODE_CONTINUOUS_PICTURE.equals(
@@ -1549,11 +1548,7 @@ public class PhotoModule
             mParameters = mCameraDevice.getParameters();
         }
 
-        if (CameraUtil.isBurstSupported(mParameters)) {
-            mBurstSnapNum = mParameters.getInt("num-snaps-per-shutter");
-        } else {
-            mBurstSnapNum = 1;
-        }
+        mBurstSnapNum = CameraUtil.getNumSnapsPerShutter(mParameters);
         mReceivedSnapNum = 0;
         mPreviewRestartSupport = SystemProperties.getBoolean(
                 PERSIST_PREVIEW_RESTART, false);
