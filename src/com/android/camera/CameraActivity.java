@@ -219,6 +219,7 @@ public class CameraActivity extends Activity
     private boolean mIsEditActivityInProgress = false;
     private View mPreviewCover;
     private FrameLayout mPreviewContentLayout;
+    private boolean mPaused = true;
 
     private Uri[] mNfcPushUris = new Uri[1];
 
@@ -1339,7 +1340,7 @@ public class CameraActivity extends Activity
 
                     @Override
                     protected void onPostExecute(MediaDetails mediaDetails) {
-                        if (mediaDetails != null) {
+                        if ((mediaDetails != null) && !mPaused) {
                             DetailsDialog.create(CameraActivity.this, mediaDetails).show();
                         }
                     }
@@ -1603,6 +1604,7 @@ public class CameraActivity extends Activity
         super.onPause();
         mCurrentModule.onPauseAfterSuper();
 
+        mPaused = true;
         mLocalImagesObserver.setActivityPaused(true);
         mLocalVideosObserver.setActivityPaused(true);
     }
@@ -1628,6 +1630,7 @@ public class CameraActivity extends Activity
         mOrientationListener.enable();
         mCurrentModule.onResumeBeforeSuper();
         super.onResume();
+        mPaused = false;
         mCurrentModule.onResumeAfterSuper();
 
         setSwipingEnabled(true);
