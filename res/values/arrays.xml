@@ -306,8 +306,8 @@
     </string-array>
 
     <string-array name="pref_camera_video_flashmode_entryvalues" translatable="false">
-        <item>off</item>
         <item>torch</item>
+        <item>off</item>
     </string-array>
 
     <array name="video_flashmode_icons" translatable="false">
