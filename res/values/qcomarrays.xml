@@ -572,8 +572,8 @@
      </string-array>
 
      <string-array name="pref_camera_redeyereduction_entryvalues" translatable="false">
-         <item>disable</item>
-         <item>enable</item>
+         <item>off</item>
+         <item>on</item>
      </string-array>
     <!-- Camera Preferences Selectable Zone AF dialog box entries -->
     <string-array name="pref_camera_selectablezoneaf_entries" translatable="false">
